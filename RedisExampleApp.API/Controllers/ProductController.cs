@@ -12,13 +12,10 @@ namespace RedisExampleApp.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository productRepository;
-        private readonly IDatabase database;
-        public ProductController(IProductRepository productRepository, IDatabase database)
+
+        public ProductController(IProductRepository productRepository)
         {
             this.productRepository = productRepository;
-            this.database = database;
-
-            this.database.StringSet("lastname", "Cavanshirli");
         }
 
         [HttpGet]

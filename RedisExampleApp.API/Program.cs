@@ -29,12 +29,14 @@ builder.Services.AddSingleton<RedisService>(sp =>
     return new RedisService(builder.Configuration["CacheOptions:Url"]!);
 });
 
-builder.Services.AddSingleton<IDatabase>(sp =>
-{
-    //yuxarida yazilmisa RedisService -den RediServici elde edirem.
-    var redisService = sp.GetRequiredService<RedisService>();
-    return redisService.GetDb(0);  
-});
+
+//Numune.
+//builder.Services.AddSingleton<IDatabase>(sp =>
+//{
+//    //yuxarida yazilmisa RedisService -den RediServici elde edirem.
+//    var redisService = sp.GetRequiredService<RedisService>();
+//    return redisService.GetDb(0);  
+//});
 
 var app = builder.Build();
 
