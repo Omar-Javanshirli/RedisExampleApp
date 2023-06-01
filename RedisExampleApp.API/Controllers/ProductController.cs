@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
+using RedisExampleApp.API.Servicies;
 using RedisExampleApp.Cache;
 using StackExchange.Redis;
 
@@ -11,29 +12,29 @@ namespace RedisExampleApp.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository productRepository;
+        private readonly IProductService productService;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductService productService)
         {
-            this.productRepository = productRepository;
+            this.productService = productService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await this.productRepository.GetAsync());
+            return Ok(await this.productService.GetAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await this.productRepository.GetByIdAsync(id));
+            return Ok(await this.productService.GetByIdAsync(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
-            return Created(string.Empty, await this.productRepository.CreateAsync(product));
+            return Created(string.Empty, await this.productService.CreateAsync(product));
         }
     }
 }

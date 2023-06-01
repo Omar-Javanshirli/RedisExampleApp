@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
+using RedisExampleApp.API.Servicies;
 using RedisExampleApp.Cache;
 using StackExchange.Redis;
 using IDatabase = StackExchange.Redis.IDatabase;
@@ -21,7 +22,17 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseInMemoryDatabase("myDatabase");
 });
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//ProductRepositoryWithCacheDecorator ucun DI container yazilis formasi.
+builder.Services.AddScoped<IProductRepository>(sp =>
+{
+    var appDbcontext = sp.GetRequiredService<AppDbContext>();
+    var productRepository = new ProductRepository(appDbcontext);
+    var redisService = sp.GetRequiredService<RedisService>();
+
+    return new ProductRepositoryWithCacheDecorator(productRepository, redisService);
+});
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 //RedisService-in Constructo-ru parametir qebul edir.Paremetri asagida ki kod vasitesi ile gonderirik.
 builder.Services.AddSingleton<RedisService>(sp =>

@@ -22,9 +22,14 @@ namespace RedisExampleApp.API.Repositories
             this.cacheRespository = this.redisService.GetDb(2);
         }
 
-        public Task<Product> CreateAsync(Product product)
+        public async Task<Product> CreateAsync(Product product)
         {
-            throw new NotImplementedException();
+            var newProduct = await this.repository.CreateAsync(product);
+
+            if (await this.cacheRespository.KeyExistsAsync(productKey))
+                await this.cacheRespository.HashSetAsync(productKey, product.Id, JsonSerializer.Serialize(newProduct));
+
+            return newProduct;
         }
 
         public async Task<List<Product>> GetAsync()
