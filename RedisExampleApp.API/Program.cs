@@ -21,9 +21,10 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
+//InMemory Default olarag bize datalari gosdermir.Biz context vasitesi ile ve Database.EnsureCreated methodunu cagirmaliyiq.
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
 }
 

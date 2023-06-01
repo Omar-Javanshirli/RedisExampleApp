@@ -35,8 +35,6 @@ namespace RedisExampleApp.API.Models
                     Price = 400
                 });
 
-
-
             base.OnModelCreating(modelBuilder);
         }
     }
