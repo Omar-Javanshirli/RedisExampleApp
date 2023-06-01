@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using RedisExampleApp.API.Models;
 using RedisExampleApp.API.Repositories;
+using RedisExampleApp.Cache;
+using StackExchange.Redis;
 
 namespace RedisExampleApp.API.Controllers
 {
@@ -10,10 +12,13 @@ namespace RedisExampleApp.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository productRepository;
-
-        public ProductController(IProductRepository productRepository)
+        private readonly IDatabase database;
+        public ProductController(IProductRepository productRepository, IDatabase database)
         {
             this.productRepository = productRepository;
+            this.database = database;
+
+            this.database.StringSet("lastname", "Cavanshirli");
         }
 
         [HttpGet]
